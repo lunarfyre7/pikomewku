@@ -1,0 +1,9 @@
+name: picomewku
+version: 0.1.0
+
+authors:
+  - lunarfyre7 <gvandereay@gmail.com>
+
+crystal: 0.34.0
+
+license: MIT
