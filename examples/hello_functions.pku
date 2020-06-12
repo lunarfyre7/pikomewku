@@ -1,0 +1,6 @@
+greet -> (name) {
+  print "Hello, "
+  puts name
+}
+
+greet("mewku!")
