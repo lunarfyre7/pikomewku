@@ -61,13 +61,15 @@ module Picomewku
     end
 
     def tokenize
-      lines = @source_string.split("\n").compact_map do |line|
+      lines = @source_string.split(/\n/).compact_map do |line|
         next if line.nil? || line[/^#/]?
         line.gsub /#.*/, ""
       end
-      @tokens = lines.join('\n').scan(/".*"|#{NUMBER_RE}|#{WORD_RE}|#{OPERATOR_RE}|[\;\n\.\(\)]/).each.map do |word|
+      puts "lines"
+      pp lines
+      @tokens = lines.join("\n").scan(/".*"|#{NUMBER_RE}|#{WORD_RE}|#{OPERATOR_RE}|[\;\n\.\(\)]/).each.map do |word|
         Token.new content: word[0]
-      end.reject { |t| t.content.nil? || t.content.blank? }.to_a 
+      end.reject { |t| t.content.nil? || t.content === / +/ }.to_a 
     end
 
     def self.lex(source_string)
@@ -89,7 +91,7 @@ module Picomewku
           token.type = :operator
         when "."
           token.type = :member_operator
-        when /[;\n]/
+        when /\;|\n/
           token.type = :newline
         when "("
           token.type = :open_paren
@@ -301,7 +303,7 @@ module Picomewku
     end
 
     def print_ast(level : Int32 =0, node=@ast)
-      puts "#{"~"*(level*2)}#{node.name}|#{node.token.try &.type}|#{node.class}|#{node.value}|#{node.try &.token.try &.content}"
+      puts "#{": "*(level)}#{node.name}|#{node.token.try &.type}|#{node.class}|#{node.value}|#{node.try &.token.try &.content}"
       node.children.each {|n| print_ast level+1, n}
     end
 
