@@ -120,6 +120,7 @@ module Picomewku
     property children, token, class_name, scope, value, parent, name
 
     def initialize(@token : Token? = nil, @value = nil, @name : String? = nil)
+      @class_name = self.class.to_s.split("::").last
     end
 
     def push_node(node : self)
@@ -185,7 +186,6 @@ module Picomewku
       class TypeInteger < Node
         def initialize
           super
-          @class_name = "Integer"
           @scope += [
             ExternProc.new
           ]
@@ -194,13 +194,11 @@ module Picomewku
 
       class TypeString < Node
         def initialize()
-          @class_name = "String"  
         end
       end
 
       class TypeArray < Node
         def initialize()
-          @class_name = "Array"
         end
 
         def set(*args)
@@ -212,7 +210,6 @@ module Picomewku
       class TypeProc < Node
         def initialize
           super
-          @class_name = "Proc"
         end
       end
 
@@ -220,7 +217,6 @@ module Picomewku
       class ExternProc < Node
         def initialize(*args, **kwargs, &block : Proc(Array(Node)?, Node?))
           super(*args, **kwargs)
-          @class_name = "ExternProc"
           @method_proc = block
         end
 
@@ -233,7 +229,6 @@ module Picomewku
       class Word < Node
         def initialize(*args, **kwargs)
           super(*args, **kwargs)
-          @class_name = "Word"
           raise "No token given" unless @token
           raise "Token type mismatch: Word != #{@token.try &.type || "EMPTY"}\n#{self.inspect}" unless @token.try &.type == :word
           @name = @token.try &.content
