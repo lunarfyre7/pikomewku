@@ -65,8 +65,6 @@ module Picomewku
         next if line.nil? || line[/^#/]?
         line.gsub /#.*/, ""
       end
-      puts "lines"
-      pp lines
       @tokens = lines.join("\n").scan(/".*"|#{NUMBER_RE}|#{WORD_RE}|#{OPERATOR_RE}|[\;\n\.\(\)]/).each.map do |word|
         Token.new content: word[0]
       end.reject { |t| t.content.nil? || t.content === / +/ }.to_a 
