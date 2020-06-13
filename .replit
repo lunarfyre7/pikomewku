@@ -1,0 +1,2 @@
+language = "crystal"
+run = "crystal run src/cli.cr -- examples/hello_mewku.pku "
